@@ -2,20 +2,30 @@
 #include<vector>
 using namespace std;
 
-void upheapify(vector<int>&heap,int idx){
-    if(idx==0){
+void downheapify(vector<int>&heap,int idx){
+    int rightidx=2*idx+2;
+    int leftidx=2*idx+1;
+
+    if(rightidx>=heap.size() && leftidx>=heap.size()){
         return;
     }
-    int parentidx=(idx-1)/2;
-    if(heap[parentidx]<heap[idx]){
-        swap(heap[parentidx],heap[idx]);
-        upheapify(heap,parentidx);
+    int largestidx=idx;
+    if(rightidx<heap.size() && heap[rightidx]>heap[largestidx]){
+        largestidx=rightidx;
     }
+    if(leftidx<heap.size() && heap[leftidx]>heap[largestidx]){
+        largestidx=leftidx;
+    }
+    if(largestidx==idx){
+        return;
+    }
+    swap(heap[largestidx],heap[idx]);
+    downheapify(heap,largestidx);
 }
 
-void buildHeap(vector<int>&heap){
+void insertInHeap(vector<int>&heap){
     for(int i=heap.size()-1;i>=0;i--){
-        upheapify(heap,i);
+        downheapify(heap,i);
     }
 }
 
@@ -31,6 +41,7 @@ int main(){
     cin>>n;
 
     vector<int>heap;
+
     int a[100005];
     for(int i=0;i<n;i++){
         cin>>a[i];
@@ -38,6 +49,6 @@ int main(){
     for(int i=0;i<n;i++){
         heap.push_back(a[i]);
     }
-    buildHeap(heap);
+    insertInHeap(heap);
     display(heap);
 }
